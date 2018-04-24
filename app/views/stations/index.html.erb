@@ -1,0 +1,143 @@
+<p id="notice"><%= notice %></p>
+
+
+
+
+<h1>Stations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Address</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stations.each do |station| %>
+      <tr>
+        <td><%= station.address %></td>
+        <td><%= station.longitude%>, <%=station.latitude %></td>
+        <td><%= link_to 'Show', station %></td>
+        <td><%= link_to 'Edit', edit_station_path(station) %></td>
+        <td><%= link_to 'Destroy', station, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Station', new_station_path %>
+
+
+
+ <%= content_tag :div, id: "map", data: {places: @stations} do %>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7nJABK2HEiQKo4V-FCEMWX5xag8vVJeA&callback=initMap">
+    </script>
+
+    <script>
+
+    let state = {lat: -33.87, lng: 151.20}
+
+    let map;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: state.lat, lng: state.lng},
+        zoom: 15
+      });
+
+      console.log($('#map').data('places') )
+
+      let placeList = $('#map').data('places')
+
+      for (var i = 0; i < placeList.length; i++) {
+        console.log( placeList[i] )
+        marker = new google.maps.Marker ({
+          position: {lat: placeList[i].latitude, lng: placeList[i].longitude},
+          map: map,
+          label: placeList[i].address
+        })
+      }
+    }
+
+    navigator.geolocation.getCurrentPosition( function(results)
+      {
+        console.log(results.coords.latitude, results.coords.longitude)
+        state = {lat: results.coords.latitude, lng: results.coords.longitude}
+        initMap()
+      })
+
+    </script>
+
+ <% end %>
+
+<!-- n = $('#rotatingElement').data('electrons')
+init(n);
+
+ -->
+
+
+ <!-- This div is probably not really necesary, I could just as easily get the data from the <li> tag for electrons.
+ But I wanted to practice using the data tag in html to move the data around. -->
+
+
+
+
+
+<!--
+<div id="map" class="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx0puTw7E8bC4pBffCMCTsL9VPjTD6Hjw&callback=initialize"
+async defer></script>
+
+<script>
+let dialects = <%== @dialects.to_json %>;
+console.log(dialects[0].region);
+let geocoder;
+let map;
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+  let latlng = new google.maps.LatLng(24.0889, 32.8998);
+  let mapOptions = {
+    zoom: 4,
+    center: latlng
+  }
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  codeAddress();
+};
+
+function codeAddress() {
+  let baghdad = dialects[0].region;
+  geocoder.geocode( { 'address': baghdad }, function(results, status) {
+    if (status == 'OK') {
+      let marker = new google.maps.Marker({
+          map: map,
+          url: '/dialects/1',
+          position: results[0].geometry.location
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+      window.location.href = marker.url});
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+
+  let ndjamena = dialects[1].region;
+  geocoder.geocode( { 'address': ndjamena }, function(results, status) {
+    if (status == 'OK') {
+      let marker = new google.maps.Marker({
+          map: map,
+          url: '/dialects/2',
+          position: results[0].geometry.location
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+      window.location.href = marker.url});
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+
+
+
+};
+</script> -->
