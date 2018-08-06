@@ -42,7 +42,8 @@
     console.log("This is test places: ", testPlaces)
 
 
-    let state = {lat: -33.87, lng: 151.20}
+    // let state = {lat: -33.87, lng: 151.20}
+    let state = {lat: 0, lng: 0}
 
     let map;
     function initMap() {
@@ -50,11 +51,11 @@
         center: {lat: state.lat, lng: state.lng},
         zoom: 15
       });
-      marker = new google.maps.Marker ({
-        position: {lat: state.lat, lng: state.lng},
-        map: map,
-        label: "here"
-      })
+      // marker = new google.maps.Marker ({
+      //   position: {lat: state.lat, lng: state.lng},
+      //   map: map,
+      //   label: "here"
+      // })
 
       console.log($('#map').data('places') )
 
@@ -68,6 +69,17 @@
           label: placeList[i].address
         })
       }
+
+      console.log("state", state)
+      var image = 'me.jpg';
+      // var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+      marker = new google.maps.Marker ({
+        position: {lat: state.lat, lng: state.lng},
+        map: map,
+        // label: "me",
+        icon: image
+      })
+
     }
 
     navigator.geolocation.getCurrentPosition( function(results)
